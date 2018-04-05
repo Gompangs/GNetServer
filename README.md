@@ -15,6 +15,33 @@ make an tcp server structure with netty, spring boot to be used for various purp
 clean package spring-boot:repackage
 ```
 
+*application.yaml can make setting easily*
+```yaml
+# netty configuration
+netty:
+  port: 10100
+  threads:
+    worker: 4
+    acceptor: 2
+  backlog: 100
+  statistics:
+    report:
+      interval: 60000
+
+
+
+# logging level
+logging:
+  level:
+    org:
+      springframework: info
+    io:
+      netty: debug
+    com:
+      gompang: info
+```
+
+
 ## Reminder
 
 
