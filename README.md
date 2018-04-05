@@ -8,7 +8,7 @@ Asynchronous High-performance TCP Server
 make an tcp server structure with netty, spring boot to be used for various purpose(chat, game server)
 
 ## Usage
-* for build executable jar *
+*for build executable jar *
 ```
 clean package spring-boot:repackage
 ```
