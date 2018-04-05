@@ -1,0 +1,19 @@
+# netty configuration
+netty:
+  port: 10100
+  threads:
+    worker: 4
+    acceptor: 2
+    isCoreBased: false
+  backlog: 100
+
+
+# logging level
+logging:
+  level:
+    org:
+      springframework: info
+    io:
+      netty: debug
+    com:
+      gompang: debug
