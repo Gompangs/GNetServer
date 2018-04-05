@@ -76,7 +76,6 @@ public class NetServer {
             sb.group(acceptGroups, workGroups)
                     .channel(EpollServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, backlog)
-                    .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel sc) {
@@ -100,7 +99,6 @@ public class NetServer {
             sb.group(acceptGroups, workGroups)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, backlog)
-                    .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel sc) {
