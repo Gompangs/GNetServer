@@ -13,5 +13,6 @@ public class SomeScheduler {
     @Scheduled(fixedDelay = 60000)
     public void schedule() {
         // some schedule
+
     }
 }
