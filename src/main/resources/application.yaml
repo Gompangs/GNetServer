@@ -6,11 +6,6 @@ netty:
     acceptor: 2
     isCoreBased: false
   backlog: 100
-  statistics:
-    report:
-      interval: 60000
-
-
 
 # logging level
 logging:
