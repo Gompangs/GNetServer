@@ -11,5 +11,5 @@ make an tcp server structure with netty, spring boot to be used for various purp
 
 
 ## References
-* [BufferManager for SocketAsyncEventArgs](https://msdn.microsoft.com/en-us/library/bb517542(VS.90).aspx)
-* [SocketAsyncEventArgs Example](http://blog.ronischuetz.com/2010/05/async-socket-server-sample-in-c.html)
+* [Netty](https://github.com/netty/netty)
+* [FlatBuffers](https://github.com/google/flatbuffers)
