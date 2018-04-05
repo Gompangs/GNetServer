@@ -16,7 +16,6 @@ public class PacketEncoder extends ChannelOutboundHandlerAdapter {
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
-        logger.info("write encode ~");
         ctx.write(msg, promise);
     }
 }

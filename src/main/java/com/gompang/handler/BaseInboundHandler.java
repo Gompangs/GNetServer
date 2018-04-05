@@ -1,10 +1,13 @@
 package com.gompang.handler;
 
+import com.gompang.manager.ServerManager;
+import com.gompang.manager.StatisticsManager;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +18,12 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private StatisticsManager statisticsManager;
+
+    @Autowired
+    private ServerManager serverManager;
+
     @PostConstruct
     public void init() {
         logger.info("BaseHandler init");
@@ -23,18 +32,21 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         logger.info("channel activated {}", ctx.channel());
+        serverManager.getChannels().add(ctx.channel());
         ctx.fireChannelActive();
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         logger.info("channel deactivated {}", ctx.channel());
+        serverManager.getChannels().remove(ctx.channel());
         ctx.fireChannelInactive();
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         logger.debug("incoming data from {}", ctx.channel());
+        statisticsManager.read(msg);
 
         // TODO : business logic
         ctx.writeAndFlush(msg);
