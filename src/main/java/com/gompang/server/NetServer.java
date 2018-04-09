@@ -67,7 +67,6 @@ public class NetServer {
 
         // check system supports epoll
         if (Epoll.isAvailable()) {
-
             logger.info("Epoll Supported and selected");
             acceptGroups = new EpollEventLoopGroup(acceptorThreads);
             workGroups = new EpollEventLoopGroup(workerThreads);
@@ -79,18 +78,10 @@ public class NetServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel sc) {
-                            ChannelPipeline cp = sc.pipeline();
-                            // outbound ↑ , call sequence
-                            cp.addLast(baseOutboundHandler);    // (2)
-                            cp.addLast(packetEncoder);          // (1)
-
-                            // inbound ↓ , (call sequence)
-                            cp.addLast(packetDecoder);          // (1)
-                            cp.addLast(baseInboundHandler);     // (2)
+                            addPipeline(sc);
                         }
                     });
         } else {
-
             logger.info("Epoll Not Supported, NIO selected");
             acceptGroups = new NioEventLoopGroup(acceptorThreads);
             workGroups = new NioEventLoopGroup(workerThreads);
@@ -102,14 +93,7 @@ public class NetServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel sc) {
-                            ChannelPipeline cp = sc.pipeline();
-                            // outbound ↑ , call sequence
-                            cp.addLast(baseOutboundHandler);    // (2)
-                            cp.addLast(packetEncoder);          // (1)
-
-                            // inbound ↓ , (call sequence)
-                            cp.addLast(packetDecoder);          // (1)
-                            cp.addLast(baseInboundHandler);     // (2)
+                            addPipeline(sc);
                         }
                     });
         }
@@ -121,5 +105,16 @@ public class NetServer {
             acceptGroups.shutdownGracefully();
             workGroups.shutdownGracefully();
         }
+    }
+
+    private void addPipeline(SocketChannel sc) {
+        ChannelPipeline cp = sc.pipeline();
+        // outbound ↑ , call sequence
+        cp.addLast(baseOutboundHandler);    // (2)
+        cp.addLast(packetEncoder);          // (1)
+
+        // inbound ↓ , (call sequence)
+        cp.addLast(packetDecoder);          // (1)
+        cp.addLast(baseInboundHandler);     // (2)
     }
 }
