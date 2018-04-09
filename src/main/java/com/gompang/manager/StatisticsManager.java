@@ -34,6 +34,9 @@ public class StatisticsManager {
     @Autowired
     private ServerManager serverManager;
 
+    @Value("${netty.report}")
+    private boolean reportFlag;
+
     @PostConstruct
     public void init() {
         this.writeAccumulator = new AtomicLong();
@@ -45,11 +48,13 @@ public class StatisticsManager {
     // report specific time for statistics
     @Scheduled(fixedRate = interval, initialDelay = 5000)
     public void report() {
-        logger.info("== [Statistics report started] ==");
-        logger.info("read count : {} , write count : {} , read bytes : {} , write bytes : {}"
-                , readCountAccumulator.get(), writeCountAccumulator.get(), readAccumulator.get(), writeAccumulator.get());
-        logger.info("current channels : {}", serverManager.getChannels().size());
-        logger.info("== [End of Statistics report] ==");
+        if (reportFlag) {
+            logger.info("== [Statistics report started] ==");
+            logger.info("read count : {} , write count : {} , read bytes : {} , write bytes : {}"
+                    , readCountAccumulator.get(), writeCountAccumulator.get(), readAccumulator.get(), writeAccumulator.get());
+            logger.info("current channels : {}", serverManager.getChannels().size());
+            logger.info("== [End of Statistics report] ==");
+        }
     }
 
 
