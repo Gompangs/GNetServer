@@ -9,7 +9,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class SampleClient {
     public static void main(String[] args) throws Exception {
-        String host = "localhost";
+        String host = "127.0.0.1";
         int port = 10100;
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
@@ -17,7 +17,6 @@ public class SampleClient {
             Bootstrap b = new Bootstrap(); // (1)
             b.group(workerGroup); // (2)
             b.channel(NioSocketChannel.class); // (3)
-            b.option(ChannelOption.SO_KEEPALIVE, true); // (4)
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {

@@ -7,7 +7,7 @@ netty:
   backlog: 100
   report:
     use : true
-    interval: 60000
+    interval: 5000
 
 # logging level
 logging:

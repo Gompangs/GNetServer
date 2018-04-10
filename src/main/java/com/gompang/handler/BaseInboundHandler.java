@@ -59,12 +59,12 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
         statisticsManager.read(msg);
 
         // get ByteBuf from pooled allocator(for make response packet)
-        byte[] readBytes = this.getBytesFromBuf((ByteBuf) msg);
+        byte[] readBytes = this.getBytesFromBuf(msg);
         ByteBuf outgoingMsg = pooledByteBufAllocator.buffer(readBytes.length);
         outgoingMsg.writeBytes(readBytes);
 
         // release buf(original)
-        ((ByteBuf)msg).release();
+        ((ByteBuf) msg).release();
 
         // TODO : business logic
         ctx.writeAndFlush(outgoingMsg);
@@ -85,17 +85,23 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
         logger.error("{} raised exception ==> {}", ctx.channel(), cause.getMessage());
     }
 
-    private byte[] getBytesFromBuf(ByteBuf buf){
+    private byte[] getBytesFromBuf(Object buf) {
+
         byte[] bytes;
-        int length = buf.readableBytes();
 
-        if (buf.hasArray()) {
-            bytes = buf.array();
+        if (buf instanceof ByteBuf) {
+            ByteBuf byteBuf = (ByteBuf) buf;
+            int length = byteBuf.readableBytes();
+            if (byteBuf.hasArray()) {
+                bytes = byteBuf.array();
+            } else {
+                bytes = new byte[length];
+                byteBuf.getBytes(byteBuf.readerIndex(), bytes);
+            }
+            return bytes;
         } else {
-            bytes = new byte[length];
-            buf.getBytes(buf.readerIndex(), bytes);
+            // otherwise not bytebuf -> get bytes
+            return (byte[]) buf;
         }
-
-        return bytes;
     }
 }
