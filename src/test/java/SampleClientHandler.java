@@ -1,7 +1,9 @@
+import ch.qos.logback.core.encoder.ByteArrayUtil;
 import com.gompang.packet.HeartBeat;
 import com.gompang.packet.PacketType;
 import com.google.flatbuffers.FlatBufferBuilder;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -20,20 +22,20 @@ public class SampleClientHandler extends ChannelInboundHandlerAdapter {
 
         FlatBufferBuilder fbb = new FlatBufferBuilder(1);
         HeartBeat.startHeartBeat(fbb);
-        HeartBeat.addType(fbb, PacketType.HEART_BEAT);
         fbb.finish(HeartBeat.endHeartBeat(fbb));
 
         byte[] bytes = fbb.sizedByteArray();
 
         Thread.sleep(1000);
-        while(true){
+        while (true) {
             ByteBuf buffer = Unpooled.buffer(bytes.length);
-            buffer.writeBytes(bytes);
+            buffer.writeByte(PacketType.HEART_BEAT); // packet type
+            buffer.writeBytes(bytes); // body
+
             ctx.writeAndFlush(buffer);
             Thread.sleep(new Random().nextInt(10));
         }
     }
-
 
 
     @Override

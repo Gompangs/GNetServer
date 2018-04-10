@@ -1,5 +1,6 @@
 package com.gompang.handler;
 
+import com.gompang.manager.PacketManager;
 import com.gompang.manager.ServerManager;
 import com.gompang.manager.StatisticsManager;
 import io.netty.buffer.ByteBuf;
@@ -31,6 +32,9 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
     @Autowired
     private ServerManager serverManager;
 
+    @Autowired
+    private PacketManager packetManager;
+
     private PooledByteBufAllocator pooledByteBufAllocator;
 
     @PostConstruct
@@ -60,6 +64,9 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
 
         // get ByteBuf from pooled allocator(for make response packet)
         byte[] readBytes = this.getBytesFromBuf(msg);
+
+        Object packet = packetManager.getPacket(readBytes);
+
         ByteBuf outgoingMsg = pooledByteBufAllocator.buffer(readBytes.length);
         outgoingMsg.writeBytes(readBytes);
 
@@ -83,6 +90,7 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         logger.error("{} raised exception ==> {}", ctx.channel(), cause.getMessage());
+        cause.printStackTrace();
     }
 
     private byte[] getBytesFromBuf(Object buf) {

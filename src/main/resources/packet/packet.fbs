@@ -8,5 +8,4 @@ enum PacketType:byte {
 }
 
 table HeartBeat {
-    type:PacketType;
 }
