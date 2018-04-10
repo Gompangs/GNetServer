@@ -3,6 +3,7 @@ package com.gompang.handler;
 import com.gompang.manager.ServerManager;
 import com.gompang.manager.StatisticsManager;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -30,9 +31,12 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
     @Autowired
     private ServerManager serverManager;
 
+    private PooledByteBufAllocator pooledByteBufAllocator;
+
     @PostConstruct
     public void init() {
         logger.info("BaseHandler init");
+        pooledByteBufAllocator = PooledByteBufAllocator.DEFAULT;
     }
 
     @Override
@@ -54,8 +58,16 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
         logger.debug("incoming data from {} , toString : {}", ctx.channel(), new String(this.getBytesFromBuf((ByteBuf) msg)), "UTF-8");
         statisticsManager.read(msg);
 
+        // get ByteBuf from pooled allocator(for make response packet)
+        byte[] readBytes = this.getBytesFromBuf((ByteBuf) msg);
+        ByteBuf outgoingMsg = pooledByteBufAllocator.buffer(readBytes.length);
+        outgoingMsg.writeBytes(readBytes);
+
+        // release buf(original)
+        ((ByteBuf)msg).release();
+
         // TODO : business logic
-        ctx.writeAndFlush(msg);
+        ctx.writeAndFlush(outgoingMsg);
     }
 
     @Override
@@ -83,6 +95,7 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
             bytes = new byte[length];
             buf.getBytes(buf.readerIndex(), bytes);
         }
+
         return bytes;
     }
 }
