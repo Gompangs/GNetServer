@@ -46,9 +46,6 @@ public class NetServer {
     @Value("${netty.threads.acceptor}")
     private int acceptorThreads;
 
-    @Value("${netty.threads.isCoreBased}")
-    private boolean isCoreBased;
-
     @Value("${netty.backlog}")
     private int backlog;
 

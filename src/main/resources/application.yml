@@ -4,7 +4,6 @@ netty:
   threads:
     worker: 4
     acceptor: 2
-    isCoreBased: false
   backlog: 100
   report: true
 
