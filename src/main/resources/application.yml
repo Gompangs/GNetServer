@@ -5,7 +5,9 @@ netty:
     worker: 4
     acceptor: 2
   backlog: 100
-  report: true
+  report:
+    use : true
+    interval: 60000
 
 # logging level
 logging:

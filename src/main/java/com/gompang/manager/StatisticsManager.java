@@ -32,12 +32,13 @@ public class StatisticsManager {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     // interval for statistics report
-    private final int interval = 60000;
+    @Value("${netty.report.interval}")
+    private int interval;
 
     @Autowired
     private ServerManager serverManager;
 
-    @Value("${netty.report}")
+    @Value("${netty.report.use}")
     private boolean reportFlag;
 
     @PostConstruct
@@ -51,7 +52,7 @@ public class StatisticsManager {
     }
 
     // report specific time for statistics
-    @Scheduled(fixedRate = interval, initialDelay = 5000)
+    @Scheduled(fixedRateString = "${netty.report.interval}", initialDelay = 5000)
     public void report() {
         if (reportFlag) {
             logger.info("== [Statistics report started] ==");

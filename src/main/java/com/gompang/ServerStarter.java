@@ -1,6 +1,5 @@
 package com.gompang;
 
-import com.gompang.server.NetServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
