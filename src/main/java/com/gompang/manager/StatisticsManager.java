@@ -26,6 +26,9 @@ public class StatisticsManager {
     private AtomicLong writeCountAccumulator;
     private AtomicLong readCountAccumulator;
 
+    private AtomicLong writeTpsAccumulator;
+    private AtomicLong readTpsAccumulator;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     // interval for statistics report
@@ -43,6 +46,8 @@ public class StatisticsManager {
         this.readAccumulator = new AtomicLong();
         this.writeCountAccumulator = new AtomicLong();
         this.readCountAccumulator = new AtomicLong();
+        this.readTpsAccumulator = new AtomicLong();
+        this.writeTpsAccumulator = new AtomicLong();
     }
 
     // report specific time for statistics
@@ -53,7 +58,11 @@ public class StatisticsManager {
             logger.info("read count : {} , write count : {} , read bytes : {} , write bytes : {}"
                     , readCountAccumulator.get(), writeCountAccumulator.get(), readAccumulator.get(), writeAccumulator.get());
             logger.info("current channels : {}", serverManager.getChannels().size());
+            logger.info("read tps : {}, write tps : {}", readTpsAccumulator.get() / (interval / 1000), writeTpsAccumulator.get() / (interval / 1000));
             logger.info("== [End of Statistics report] ==");
+
+            this.readTpsAccumulator.set(0L);
+            this.writeTpsAccumulator.set(0L);
         }
     }
 
@@ -62,6 +71,7 @@ public class StatisticsManager {
         if (object instanceof ByteBuf) {
             this.readAccumulator.addAndGet(((ByteBuf) object).readableBytes());
             this.writeCountAccumulator.incrementAndGet();
+            this.writeTpsAccumulator.incrementAndGet();
         }
     }
 
@@ -69,6 +79,7 @@ public class StatisticsManager {
         if (object instanceof ByteBuf) {
             this.writeAccumulator.addAndGet(((ByteBuf) object).readableBytes());
             readCountAccumulator.incrementAndGet();
+            this.readTpsAccumulator.incrementAndGet();
         }
     }
 }

@@ -2,6 +2,7 @@ package com.gompang.handler;
 
 import com.gompang.manager.ServerManager;
 import com.gompang.manager.StatisticsManager;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -45,7 +46,7 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        logger.debug("incoming data from {}", ctx.channel());
+        logger.debug("incoming data from {} , toString : {}", ctx.channel(), new String(this.getBytesFromBuf((ByteBuf) msg)), "UTF-8");
         statisticsManager.read(msg);
 
         // TODO : business logic
@@ -65,5 +66,18 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         logger.error("{} raised exception ==> {}", ctx.channel(), cause.getMessage());
+    }
+
+    private byte[] getBytesFromBuf(ByteBuf buf){
+        byte[] bytes;
+        int length = buf.readableBytes();
+
+        if (buf.hasArray()) {
+            bytes = buf.array();
+        } else {
+            bytes = new byte[length];
+            buf.getBytes(buf.readerIndex(), bytes);
+        }
+        return bytes;
     }
 }

@@ -6,7 +6,7 @@ netty:
     acceptor: 2
     isCoreBased: false
   backlog: 100
-  report: false
+  report: true
 
 # logging level
 logging:
