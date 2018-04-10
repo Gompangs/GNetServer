@@ -10,6 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/*
+    Created By Gompangs(stacks5978) at 2018. 4. 11.
+    blog : http://gompangs.tistory.com/
+*/
+
 @Component
 @ChannelHandler.Sharable
 public class BaseOutboundHandler extends ChannelOutboundHandlerAdapter {

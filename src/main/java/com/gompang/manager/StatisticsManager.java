@@ -1,11 +1,6 @@
 package com.gompang.manager;
 
-import com.gompang.server.NetServer;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
-import io.netty.util.concurrent.GlobalEventExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +10,11 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.concurrent.atomic.AtomicLong;
+
+/*
+    Created By Gompangs(stacks5978) at 2018. 4. 11.
+    blog : http://gompangs.tistory.com/
+*/
 
 @Component
 public class StatisticsManager {
