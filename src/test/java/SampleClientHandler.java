@@ -31,7 +31,7 @@ class MsgSender implements Runnable {
 
             try {
                 ByteBuf buffer = Unpooled.buffer(bytes.length);
-                buffer.writeByte(PacketType.HEART_BEAT); // packet type
+                buffer.writeByte(PacketType.HeartBeat); // packet type
                 buffer.writeBytes(bytes); // body
 
                 ctx.writeAndFlush((buffer));

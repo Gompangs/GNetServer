@@ -4,11 +4,11 @@ package com.gompang.packet;
 
 public final class PacketType {
   private PacketType() { }
-  public static final byte HEART_BEAT = 0;
-  public static final byte LOGIN = 1;
-  public static final byte LOGOUT = 2;
+  public static final byte HeartBeat = 0;
+  public static final byte Login = 1;
+  public static final byte Logout = 2;
 
-  public static final String[] names = { "HEART_BEAT", "LOGIN", "LOGOUT", };
+  public static final String[] names = { "HeartBeat", "Login", "Logout", };
 
   public static String name(int e) { return names[e]; }
 }

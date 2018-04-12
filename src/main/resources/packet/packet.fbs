@@ -2,10 +2,19 @@
 namespace com.gompang.packet;
 
 enum PacketType:byte {
-    HEART_BEAT = 0,
-    LOGIN,
-    LOGOUT,
+    HeartBeat = 0,
+    Login,
+    Logout,
 }
 
 table HeartBeat {
+
+}
+
+table Login {
+    id:string;
+}
+
+table Logout {
+    id:string;
 }

@@ -24,7 +24,7 @@
                 </os>
             </activation>
             <properties>
-                <bin.path>${basedir}/bin/flatc</bin.path>
+                <bin.path>${basedir}/bin/flatc.exe</bin.path>
             </properties>
         </profile>
         <profile>
@@ -35,7 +35,7 @@
                 </os>
             </activation>
             <properties>
-                <bin.path>flatc</bin.path>
+                <bin.path>${basedir}/bin/flatc_mac</bin.path>
             </properties>
         </profile>
         <profile>

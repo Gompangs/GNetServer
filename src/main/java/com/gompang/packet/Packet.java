@@ -1,11 +1,5 @@
 package com.gompang.packet;
 
-import com.gompang.packet.HeartBeat;
-import com.gompang.packet.PacketType;
-import com.google.flatbuffers.Table;
-
-import java.nio.ByteBuffer;
-
 /*
     Created By Gompangs(stacks5978) at 2018. 4. 12.
     blog : http://gompangs.tistory.com/
