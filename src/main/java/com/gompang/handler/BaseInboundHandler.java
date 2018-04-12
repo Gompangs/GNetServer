@@ -59,12 +59,15 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        logger.info("{}", msg.getClass().getName());
-//        logger.debug("incoming data from {} , toString : {}", ctx.channel(), new String(this.getBytesFromBuf((ByteBuf) msg)), "UTF-8");
-        statisticsManager.read(msg);
+        if(msg instanceof byte[]){
+            byte[] received = (byte[]) msg;
 
-        // TODO : business logic
-        ctx.writeAndFlush(msg);
+            logger.info("{} {}", received, received.length);
+            statisticsManager.read(msg);
+
+            // TODO : business logic
+            ctx.writeAndFlush(msg);
+        }
     }
 
     @Override

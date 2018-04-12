@@ -12,40 +12,56 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
-public class SampleClientHandler extends ChannelInboundHandlerAdapter {
+class MsgSender implements Runnable {
 
+    private ChannelHandlerContext ctx;
+
+    public MsgSender(ChannelHandlerContext ctx) {
+        this.ctx = ctx;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            FlatBufferBuilder fbb = new FlatBufferBuilder(1);
+            HeartBeat.startHeartBeat(fbb);
+            fbb.finish(HeartBeat.endHeartBeat(fbb));
+
+            byte[] bytes = fbb.sizedByteArray();
+
+            try {
+                ByteBuf buffer = Unpooled.buffer(bytes.length);
+                buffer.writeByte(PacketType.HEART_BEAT); // packet type
+                buffer.writeBytes(bytes); // body
+
+                ctx.writeAndFlush((buffer));
+                Thread.sleep(new Random().nextInt(10));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                Thread.sleep(new Random().nextInt(1000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+public class SampleClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("connected");
         // send random data to server when it connected
-        sendMsg(ctx);
-    }
-
-    private void sendMsg(ChannelHandlerContext ctx){
-        FlatBufferBuilder fbb = new FlatBufferBuilder(1);
-        HeartBeat.startHeartBeat(fbb);
-        fbb.finish(HeartBeat.endHeartBeat(fbb));
-
-        byte[] bytes = fbb.sizedByteArray();
-
-        try {
-            ByteBuf buffer = Unpooled.buffer(bytes.length);
-            buffer.writeByte(PacketType.HEART_BEAT); // packet type
-            buffer.writeBytes(bytes); // body
-
-            ctx.writeAndFlush((buffer));
-            Thread.sleep(new Random().nextInt(10));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        new Thread(new MsgSender(ctx)).start();
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         System.out.println("read from server : " + msg.getClass().getName());
 //        ctx.writeAndFlush(msg);
-        sendMsg(ctx);
+//        sendMsg(ctx);
     }
 
     @Override
