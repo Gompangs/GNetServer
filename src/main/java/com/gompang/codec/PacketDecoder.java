@@ -1,5 +1,7 @@
 package com.gompang.codec;
 
+import com.gompang.packet.Packet;
+import com.gompang.packet.PacketType;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -20,7 +22,25 @@ public class PacketDecoder extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        logger.info("{}", msg.getClass().getName());
-        ctx.fireChannelRead(msg);
+
+        // decode packet
+        byte[] received = (byte[]) msg;
+
+        logger.info("TYPE : {} {}", received[0], PacketType.name(received[0]));
+        logger.info("BODY : {} {}", getBody(received), getBody(received).length);
+
+        // get packet class
+        Packet packet = new Packet(received[0], getBody(received));
+
+
+        // fire to inbound handler
+        ctx.fireChannelRead(packet);
+    }
+
+
+    private byte[] getBody(byte[] origin) {
+        byte[] body = new byte[origin.length - 1];
+        System.arraycopy(origin, 1, body, 0, body.length);
+        return body;
     }
 }

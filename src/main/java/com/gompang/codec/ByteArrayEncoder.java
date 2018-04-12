@@ -1,7 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
 
 package com.gompang.codec;
 
@@ -12,6 +8,11 @@ import io.netty.handler.codec.MessageToMessageEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+/*
+    Created By Gompangs(stacks5978) at 2018. 4. 11.
+    blog : http://gompangs.tistory.com/
+*/
 
 @Sharable
 @Component

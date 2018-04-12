@@ -1,15 +1,20 @@
 package com.gompang.codec;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/*
+    Created By Gompangs(stacks5978) at 2018. 4. 11.
+    blog : http://gompangs.tistory.com/
+*/
+
 @Component
-@ChannelHandler.Sharable
+@Sharable
 public class ByteArrayDecoder extends MessageToMessageDecoder<ByteBuf> {
 
     @Override

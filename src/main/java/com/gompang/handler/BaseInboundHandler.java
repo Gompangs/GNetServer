@@ -1,10 +1,9 @@
 package com.gompang.handler;
 
-import com.gompang.manager.PacketManager;
+import com.gompang.dispatcher.PacketDispatcher;
+import com.gompang.packet.Packet;
 import com.gompang.manager.ServerManager;
 import com.gompang.manager.StatisticsManager;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -33,14 +32,12 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
     private ServerManager serverManager;
 
     @Autowired
-    private PacketManager packetManager;
+    private PacketDispatcher packetDispatcher;
 
-    private PooledByteBufAllocator pooledByteBufAllocator;
 
     @PostConstruct
     public void init() {
         logger.info("BaseHandler init");
-        pooledByteBufAllocator = PooledByteBufAllocator.DEFAULT;
     }
 
     @Override
@@ -59,13 +56,12 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        if(msg instanceof byte[]){
-            byte[] received = (byte[]) msg;
+        logger.info("{}", msg.getClass().getName());
+        if (msg instanceof Packet) {
+            Packet packet = (Packet) msg;
+            packetDispatcher.dispatch(packet);
 
-            logger.info("{} {}", received, received.length);
             statisticsManager.read(msg);
-
-            // TODO : business logic
             ctx.writeAndFlush(msg);
         }
     }
