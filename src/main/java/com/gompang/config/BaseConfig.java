@@ -1,7 +1,10 @@
 package com.gompang.config;
 
+import io.netty.handler.codec.bytes.ByteArrayDecoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -22,4 +25,5 @@ public class BaseConfig {
     public void init(){
         logger.info("BaseConfig Init");
     }
+
 }

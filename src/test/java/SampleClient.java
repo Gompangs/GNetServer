@@ -6,6 +6,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.bytes.ByteArrayDecoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 
 public class SampleClient {
     public static void main(String[] args) throws Exception {
@@ -20,6 +22,7 @@ public class SampleClient {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
+                    ch.pipeline().addLast(new ByteArrayDecoder());
                     ch.pipeline().addLast(new SampleClientHandler());
                 }
             });

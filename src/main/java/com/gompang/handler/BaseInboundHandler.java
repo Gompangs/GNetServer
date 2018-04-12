@@ -59,22 +59,12 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        logger.debug("incoming data from {} , toString : {}", ctx.channel(), new String(this.getBytesFromBuf((ByteBuf) msg)), "UTF-8");
+        logger.info("{}", msg.getClass().getName());
+//        logger.debug("incoming data from {} , toString : {}", ctx.channel(), new String(this.getBytesFromBuf((ByteBuf) msg)), "UTF-8");
         statisticsManager.read(msg);
 
-        // get ByteBuf from pooled allocator(for make response packet)
-        byte[] readBytes = this.getBytesFromBuf(msg);
-
-        Object packet = packetManager.getPacket(readBytes);
-
-        ByteBuf outgoingMsg = pooledByteBufAllocator.buffer(readBytes.length);
-        outgoingMsg.writeBytes(readBytes);
-
-        // release buf(original)
-        ((ByteBuf) msg).release();
-
         // TODO : business logic
-        ctx.writeAndFlush(outgoingMsg);
+        ctx.writeAndFlush(msg);
     }
 
     @Override
@@ -91,25 +81,5 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         logger.error("{} raised exception ==> {}", ctx.channel(), cause.getMessage());
         cause.printStackTrace();
-    }
-
-    private byte[] getBytesFromBuf(Object buf) {
-
-        byte[] bytes;
-
-        if (buf instanceof ByteBuf) {
-            ByteBuf byteBuf = (ByteBuf) buf;
-            int length = byteBuf.readableBytes();
-            if (byteBuf.hasArray()) {
-                bytes = byteBuf.array();
-            } else {
-                bytes = new byte[length];
-                byteBuf.getBytes(byteBuf.readerIndex(), bytes);
-            }
-            return bytes;
-        } else {
-            // otherwise not bytebuf -> get bytes
-            return (byte[]) buf;
-        }
     }
 }

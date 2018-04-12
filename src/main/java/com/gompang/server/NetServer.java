@@ -1,5 +1,7 @@
 package com.gompang.server;
 
+import com.gompang.codec.ByteArrayDecoder;
+import com.gompang.codec.ByteArrayEncoder;
 import com.gompang.codec.PacketDecoder;
 import com.gompang.codec.PacketEncoder;
 import com.gompang.handler.BaseInboundHandler;
@@ -9,14 +11,9 @@ import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.concurrent.GlobalEventExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +57,12 @@ public class NetServer {
 
     @Autowired
     private PacketEncoder packetEncoder;
+
+    @Autowired
+    private ByteArrayDecoder byteArrayDecoder;
+
+    @Autowired
+    private ByteArrayEncoder byteArrayEncoder;
 
     @PostConstruct
     public void init() {
@@ -112,11 +115,13 @@ public class NetServer {
     private void addPipeline(SocketChannel sc) {
         ChannelPipeline cp = sc.pipeline();
         // outbound ↑ , call sequence
-        cp.addLast(baseOutboundHandler);    // (2)
-        cp.addLast(packetEncoder);          // (1)
+        cp.addLast(baseOutboundHandler);    // (3)
+        cp.addLast(packetEncoder);          // (2)
+        cp.addLast(byteArrayEncoder);       // (1)
 
         // inbound ↓ , (call sequence)
-        cp.addLast(packetDecoder);          // (1)
-        cp.addLast(baseInboundHandler);     // (2)
+        cp.addLast(byteArrayDecoder);       // (1)
+        cp.addLast(packetDecoder);          // (2)
+        cp.addLast(baseInboundHandler);     // (3)
     }
 }

@@ -20,6 +20,7 @@ public class PacketDecoder extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        logger.info("{}", msg.getClass().getName());
         ctx.fireChannelRead(msg);
     }
 }

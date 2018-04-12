@@ -69,8 +69,8 @@ public class StatisticsManager {
 
 
     public void read(Object object) {
-        if (object instanceof ByteBuf) {
-            this.readAccumulator.addAndGet(((ByteBuf) object).readableBytes());
+        if (object instanceof byte[]) {
+            this.readAccumulator.addAndGet(((byte[]) object).length);
             this.writeCountAccumulator.incrementAndGet();
             this.writeTpsAccumulator.incrementAndGet();
         }
