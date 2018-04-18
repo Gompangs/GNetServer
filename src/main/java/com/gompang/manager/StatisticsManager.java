@@ -58,10 +58,10 @@ public class StatisticsManager {
     public void report() {
         if (reportFlag) {
             logger.info("== [Statistics report started] ==");
+            logger.info("current channels : {}", serverManager.getChannels().size());
             logger.info("read count : {} , write count : {} , read size : {} , write size : {}"
                     , readCountAccumulator.get(), writeCountAccumulator.get(), formatFileSize(readAccumulator.get()), formatFileSize(writeAccumulator.get()));
-            logger.info("current channels : {}", serverManager.getChannels().size());
-            logger.info("read tps : {}, write tps : {}", readTpsAccumulator.get() / (interval / 1000), writeTpsAccumulator.get() / (interval / 1000));
+            logger.info("current read tps : {}, current write tps : {}", readTpsAccumulator.get() / (interval / 1000), writeTpsAccumulator.get() / (interval / 1000));
             logger.info("== [End of Statistics report] ==");
 
             this.readTpsAccumulator.set(0L);

@@ -35,7 +35,7 @@ class MsgSender implements Runnable {
                 buffer.writeBytes(bytes); // body
 
                 ctx.writeAndFlush((buffer));
-                Thread.sleep(new Random().nextInt(10));
+                Thread.sleep(new Random().nextInt(2));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

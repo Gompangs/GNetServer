@@ -20,10 +20,10 @@ public class BaseServiceImpl implements BaseService {
     @Autowired
     private PacketSupport packetSupport;
 
+    private byte[] heartbeat;
+
     @Override
     public byte[] heartBeat(ChannelHandlerContext ctx, Packet packet) {
-        packet.setPacket(HeartBeat.getRootAsHeartBeat(ByteBuffer.wrap(packet.getBody())));
-
         // heartbeat from remote client
         return packetSupport.getPacket(PacketType.HeartBeat);
     }
