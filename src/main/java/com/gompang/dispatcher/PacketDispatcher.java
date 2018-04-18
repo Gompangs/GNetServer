@@ -1,8 +1,5 @@
 package com.gompang.dispatcher;
 
-import com.gompang.domain.TypedMap;
-import com.gompang.domain.TypedMapKey;
-import com.gompang.packet.HeartBeat;
 import com.gompang.packet.Packet;
 import com.gompang.packet.PacketType;
 import com.gompang.service.AccountService;
@@ -14,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.nio.ByteBuffer;
 
 /*
     Created By Gompangs(stacks5978) at 2018. 4. 12.
@@ -37,24 +33,27 @@ public class PacketDispatcher {
 
     }
 
-    public void dispatch(ChannelHandlerContext ctx, Packet packet) {
+    public byte[] dispatch(ChannelHandlerContext ctx, Packet packet) {
+
+        byte[] response = new byte[0];
 
         switch (packet.getType()) {
             case PacketType.HeartBeat: {
-                baseService.heartBeat(ctx, packet);
+                response = baseService.heartBeat(ctx, packet);
                 break;
             }
             case PacketType.Login: {
-                accountService.login(ctx, packet);
+                response = accountService.login(ctx, packet);
                 break;
             }
             case PacketType.Logout: {
-                accountService.logout(ctx, packet);
+                response = accountService.logout(ctx, packet);
                 break;
             }
             default: {
                 break;
             }
         }
+        return response;
     }
 }

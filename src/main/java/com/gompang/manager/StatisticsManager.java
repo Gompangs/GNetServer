@@ -1,5 +1,6 @@
 package com.gompang.manager;
 
+import com.gompang.packet.Packet;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.text.DecimalFormat;
 import java.util.concurrent.atomic.AtomicLong;
 
 /*
@@ -56,8 +58,8 @@ public class StatisticsManager {
     public void report() {
         if (reportFlag) {
             logger.info("== [Statistics report started] ==");
-            logger.info("read count : {} , write count : {} , read bytes : {} , write bytes : {}"
-                    , readCountAccumulator.get(), writeCountAccumulator.get(), readAccumulator.get(), writeAccumulator.get());
+            logger.info("read count : {} , write count : {} , read size : {} , write size : {}"
+                    , readCountAccumulator.get(), writeCountAccumulator.get(), formatFileSize(readAccumulator.get()), formatFileSize(writeAccumulator.get()));
             logger.info("current channels : {}", serverManager.getChannels().size());
             logger.info("read tps : {}, write tps : {}", readTpsAccumulator.get() / (interval / 1000), writeTpsAccumulator.get() / (interval / 1000));
             logger.info("== [End of Statistics report] ==");
@@ -68,18 +70,46 @@ public class StatisticsManager {
     }
 
     public void read(Object object) {
-        if (object instanceof byte[]) {
-            this.readAccumulator.addAndGet(((byte[]) object).length);
+        if (object instanceof Packet) {
+            Packet packet = (Packet) object;
+            this.readAccumulator.addAndGet(1 + packet.getBody().length);
+            this.readCountAccumulator.incrementAndGet();
+            this.readTpsAccumulator.incrementAndGet();
+        }
+    }
+
+    public void write(Object object) {
+        if (object instanceof ByteBuf) {
+            ByteBuf packet = (ByteBuf) object;
+            this.writeAccumulator.addAndGet(packet.readableBytes());
             this.writeCountAccumulator.incrementAndGet();
             this.writeTpsAccumulator.incrementAndGet();
         }
     }
 
-    public void write(Object object) {
-        if (object instanceof byte[]) {
-            this.writeAccumulator.addAndGet(((byte[]) object).length);
-            readCountAccumulator.incrementAndGet();
-            this.readTpsAccumulator.incrementAndGet();
+    private String formatFileSize(long size) {
+        String hrSize;
+
+        double b = size;
+        double k = size / 1024.0;
+        double m = ((size / 1024.0) / 1024.0);
+        double g = (((size / 1024.0) / 1024.0) / 1024.0);
+        double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);
+
+        DecimalFormat dec = new DecimalFormat("0.00");
+
+        if (t > 1) {
+            hrSize = dec.format(t).concat(" TB");
+        } else if (g > 1) {
+            hrSize = dec.format(g).concat(" GB");
+        } else if (m > 1) {
+            hrSize = dec.format(m).concat(" MB");
+        } else if (k > 1) {
+            hrSize = dec.format(k).concat(" KB");
+        } else {
+            hrSize = dec.format(b).concat(" Bytes");
         }
+
+        return hrSize;
     }
 }

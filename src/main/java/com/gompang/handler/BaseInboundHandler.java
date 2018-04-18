@@ -56,13 +56,12 @@ public class BaseInboundHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        logger.info("{}", msg.getClass().getName());
         if (msg instanceof Packet) {
             Packet packet = (Packet) msg;
-            packetDispatcher.dispatch(ctx, packet);
-
             statisticsManager.read(msg);
-            ctx.writeAndFlush(msg);
+
+            byte[] response = packetDispatcher.dispatch(ctx, packet);
+            ctx.writeAndFlush(response);
         }
     }
 

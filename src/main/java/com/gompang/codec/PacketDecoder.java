@@ -25,10 +25,6 @@ public class PacketDecoder extends ChannelInboundHandlerAdapter {
 
         // decode packet
         byte[] received = (byte[]) msg;
-
-        logger.info("TYPE : {} {}", received[0], PacketType.name(received[0]));
-        logger.info("BODY : {} {}", getBody(received), getBody(received).length);
-
         // get packet class
         Packet packet = new Packet(received[0], getBody(received));
 

@@ -20,7 +20,7 @@ public class ByteArrayEncoder extends MessageToMessageEncoder<byte[]> {
     public ByteArrayEncoder() {
     }
 
-    protected void encode(ChannelHandlerContext ctx, byte[] msg, List<Object> out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, byte[] msg, List<Object> out) {
         out.add(Unpooled.wrappedBuffer(msg));
     }
 }
