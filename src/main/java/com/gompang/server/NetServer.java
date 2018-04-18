@@ -14,6 +14,7 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +116,7 @@ public class NetServer {
     private void addPipeline(SocketChannel sc) {
         ChannelPipeline cp = sc.pipeline();
         // outbound ↑ , call sequence
+
         cp.addLast(baseOutboundHandler);    // (3)
         cp.addLast(packetEncoder);          // (2)
         cp.addLast(byteArrayEncoder);       // (1)

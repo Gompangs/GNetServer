@@ -5,8 +5,12 @@ import com.gompang.domain.TypedMapKey;
 import com.gompang.packet.HeartBeat;
 import com.gompang.packet.Packet;
 import com.gompang.packet.PacketType;
+import com.gompang.service.AccountService;
+import com.gompang.service.BaseService;
+import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -22,25 +26,35 @@ public class PacketDispatcher {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private TypedMap typedMap;
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private BaseService baseService;
 
     @PostConstruct
     public void init() {
-        typedMap = new TypedMap();
+
     }
 
-    private void initPacketMap() {
-        for (String type : PacketType.names) {
-            typedMap.put(new TypedMapKey<>(type), "");
-        }
-    }
+    public void dispatch(ChannelHandlerContext ctx, Packet packet) {
 
-    public void dispatch(Packet packet) {
-
-        // TODO : type dispatching ..
-        if (packet.getType() == PacketType.HeartBeat) {
-            packet.setPacket(HeartBeat.getRootAsHeartBeat(ByteBuffer.wrap(packet.getBody())));
-            logger.info("HEART BEAT PACKET RECEIVED : {}", packet.getPacket());
+        switch (packet.getType()) {
+            case PacketType.HeartBeat: {
+                baseService.heartBeat(ctx, packet);
+                break;
+            }
+            case PacketType.Login: {
+                accountService.login(ctx, packet);
+                break;
+            }
+            case PacketType.Logout: {
+                accountService.logout(ctx, packet);
+                break;
+            }
+            default: {
+                break;
+            }
         }
     }
 }
