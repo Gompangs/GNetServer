@@ -3,18 +3,21 @@ namespace com.gompang.packet;
 
 enum PacketType:byte {
     HeartBeat = 0,
-    Login,
-    Logout,
+    DeviceRegister,
+    PlayerLogin,
 }
 
 table HeartBeat {
-
 }
 
-table Login {
-    id:string;
+// device registration
+table DeviceRegisterMsg {
+    deviceId:string;
+    userId:string;
 }
 
-table Logout {
-    id:string;
+table PlayerLoginMsg {
+    userId:string;
+    deviceId:string;
+    token:string;
 }

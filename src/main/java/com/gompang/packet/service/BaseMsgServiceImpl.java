@@ -1,6 +1,5 @@
-package com.gompang.service;
+package com.gompang.packet.service;
 
-import com.gompang.packet.HeartBeat;
 import com.gompang.packet.Packet;
 import com.gompang.packet.PacketType;
 import com.gompang.support.PacketSupport;
@@ -10,10 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.nio.ByteBuffer;
-
 @Service
-public class BaseServiceImpl implements BaseService {
+public class BaseMsgServiceImpl implements BaseMsgService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

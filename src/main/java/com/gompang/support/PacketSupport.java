@@ -3,6 +3,8 @@ package com.gompang.support;
 import com.gompang.packet.HeartBeat;
 import com.gompang.packet.PacketType;
 import com.google.flatbuffers.FlatBufferBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class PacketSupport {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     Map<Byte, byte[]> packetMap;
 

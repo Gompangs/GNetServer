@@ -1,16 +1,14 @@
-import ch.qos.logback.core.encoder.ByteArrayUtil;
+package client;
+
 import com.gompang.packet.HeartBeat;
 import com.gompang.packet.PacketType;
 import com.google.flatbuffers.FlatBufferBuilder;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-import java.util.Date;
 import java.util.Random;
-import java.util.UUID;
 
 class MsgSender implements Runnable {
 

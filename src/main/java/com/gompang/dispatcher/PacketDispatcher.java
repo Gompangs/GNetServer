@@ -2,8 +2,8 @@ package com.gompang.dispatcher;
 
 import com.gompang.packet.Packet;
 import com.gompang.packet.PacketType;
-import com.gompang.service.AccountService;
-import com.gompang.service.BaseService;
+import com.gompang.packet.service.AccountMsgService;
+import com.gompang.packet.service.BaseMsgService;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +23,10 @@ public class PacketDispatcher {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private AccountService accountService;
+    private AccountMsgService accountMsgService;
 
     @Autowired
-    private BaseService baseService;
+    private BaseMsgService baseMsgService;
 
     @PostConstruct
     public void init() {
@@ -39,15 +39,15 @@ public class PacketDispatcher {
 
         switch (packet.getType()) {
             case PacketType.HeartBeat: {
-                response = baseService.heartBeat(ctx, packet);
+                response = baseMsgService.heartBeat(ctx, packet);
                 break;
             }
-            case PacketType.Login: {
-                response = accountService.login(ctx, packet);
+            case PacketType.DeviceRegister: {
+                response = accountMsgService.deviceRegister(ctx, packet);
                 break;
             }
-            case PacketType.Logout: {
-                response = accountService.logout(ctx, packet);
+            case PacketType.PlayerLogin: {
+                response = accountMsgService.playerLogin(ctx, packet);
                 break;
             }
             default: {

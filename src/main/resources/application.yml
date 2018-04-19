@@ -9,6 +9,14 @@ netty:
     use : true
     interval: 30000
 
+server:
+  useAuthentication : true
+  token:
+    issuer: "gompang-server"
+    secret: "31626747CACA430FA82C292D9BE7B000"
+    expiration: 60 # minutes when token expired
+
+
 # logging level
 logging:
   level:

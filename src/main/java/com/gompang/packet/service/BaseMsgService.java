@@ -1,8 +1,8 @@
-package com.gompang.service;
+package com.gompang.packet.service;
 
 import com.gompang.packet.Packet;
 import io.netty.channel.ChannelHandlerContext;
 
-public interface BaseService {
+public interface BaseMsgService {
     byte[] heartBeat(ChannelHandlerContext ctx, Packet packet);
 }
