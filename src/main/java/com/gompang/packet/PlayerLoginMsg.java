@@ -16,10 +16,13 @@ public final class PlayerLoginMsg extends Table {
 
   public String userId() { int o = __offset(4); return o != 0 ? __string(o + bb_pos) : null; }
   public ByteBuffer userIdAsByteBuffer() { return __vector_as_bytebuffer(4, 1); }
+  public ByteBuffer userIdInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 4, 1); }
   public String deviceId() { int o = __offset(6); return o != 0 ? __string(o + bb_pos) : null; }
   public ByteBuffer deviceIdAsByteBuffer() { return __vector_as_bytebuffer(6, 1); }
+  public ByteBuffer deviceIdInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 6, 1); }
   public String token() { int o = __offset(8); return o != 0 ? __string(o + bb_pos) : null; }
   public ByteBuffer tokenAsByteBuffer() { return __vector_as_bytebuffer(8, 1); }
+  public ByteBuffer tokenInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 8, 1); }
 
   public static int createPlayerLoginMsg(FlatBufferBuilder builder,
       int userIdOffset,

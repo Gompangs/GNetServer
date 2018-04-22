@@ -1,9 +1,9 @@
 package com.gompang.service;
 
-import com.gompang.common.domain.LoginResult;
 import com.gompang.domain.Player;
+import com.gompang.packet.AuthResult;
 
 public interface AuthService {
-    LoginResult login(Player player);
+    short login(Player player);
     boolean isLogin(Player player);
 }

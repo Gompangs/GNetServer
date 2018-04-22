@@ -7,7 +7,19 @@ enum PacketType:byte {
     PlayerLogin,
 }
 
+enum CommonResult:short {
+    FAIL = 0,
+    SUCCESS,
+}
+
+enum AuthResult:short {
+    FAIL = 0,
+    INVALID_TOKEN,
+    SUCCESS,
+}
+
 table HeartBeat {
+
 }
 
 // device registration
