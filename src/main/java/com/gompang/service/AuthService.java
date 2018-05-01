@@ -1,7 +1,8 @@
 package com.gompang.service;
 
 import com.gompang.domain.Player;
+import com.gompang.domain.PlayerToken;
 
 public interface AuthService {
-    String login(Player player);
+    PlayerToken login(Player player);
 }

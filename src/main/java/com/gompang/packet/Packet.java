@@ -4,10 +4,11 @@ package com.gompang.packet;
     Created By Gompangs(stacks5978) at 2018. 4. 12.
     blog : http://gompangs.tistory.com/
 */
-public class Packet {
+@com.gompang.annotation.Packet
+public class Packet<T> {
     private byte type;
     private byte[] body;
-    private Object packet;
+    private T packet;
 
     public Packet(byte type, byte[] body) {
         this.type = type;
@@ -30,11 +31,11 @@ public class Packet {
         this.body = body;
     }
 
-    public Object getPacket() {
+    public T getPacket() {
         return packet;
     }
 
-    public void setPacket(Object packet) {
+    public void setPacket(T packet) {
         this.packet = packet;
     }
 }

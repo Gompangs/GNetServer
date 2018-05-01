@@ -16,6 +16,7 @@ public class PacketSupport {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    // static packet map
     Map<Byte, byte[]> packetMap;
 
     @PostConstruct

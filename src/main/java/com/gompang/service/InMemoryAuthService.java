@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.gompang.domain.Player;
+import com.gompang.domain.PlayerToken;
 import com.gompang.repository.PlayerStore;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -44,24 +45,28 @@ public class InMemoryAuthService implements AuthService {
     }
 
     @Override
-    public String login(Player player) {
+    public PlayerToken login(Player player) {
         Player existingPlayer = playerStore.getPlayer(player.getPlayerId());
 
-        if (existingPlayer.getStoredDeviceIds().contains(player.getDeviceId())) {
-            // login stored device
-            logger.debug("login stored device : {}", player.getDeviceId());
-        } else {
-            // login new device
-            logger.debug("login with new device : {}", player.getDeviceId());
+        if (existingPlayer != null) {
+            if (existingPlayer.getStoredDeviceIds().contains(player.getDeviceId())) {
+                // login stored device
+                logger.debug("login stored device : {}", player.getDeviceId());
+            } else {
+                // login new device
+                logger.debug("login with new device : {}", player.getDeviceId());
 
-            // add device id into device list
-            playerStore.putDeviceId(player);
+                // add device id into device list
+                playerStore.putDeviceId(player);
+            }
+        } else {
+            // new Player
+            logger.debug("new player : {}", player);
+            playerStore.putPlayer(player);
         }
 
         // create token
-
-
-        return null;
+        return new PlayerToken(player, generateToken(player));
     }
 
     private String generateToken(Player player) {
@@ -85,7 +90,7 @@ public class InMemoryAuthService implements AuthService {
         return token;
     }
 
-    private String createUUID(){
+    private String createUUID() {
         return UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
     }
 }
