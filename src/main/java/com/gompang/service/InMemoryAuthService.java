@@ -3,24 +3,21 @@ package com.gompang.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.gompang.common.support.CommonSupport;
 import com.gompang.domain.Player;
-import com.gompang.domain.PlayerToken;
+import com.gompang.packet.AuthResult;
 import com.gompang.repository.PlayerStore;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class InMemoryAuthService implements AuthService {
@@ -38,6 +35,9 @@ public class InMemoryAuthService implements AuthService {
 
     @Autowired
     private PlayerStore playerStore;
+
+    @Autowired
+    private CommonSupport commonSupport;
 
     @PostConstruct
     public void init() {
@@ -77,7 +77,7 @@ public class InMemoryAuthService implements AuthService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             token = JWT.create()
                     .withAudience(player.getPlayerId())
-                    .withJWTId(createUUID())
+                    .withJWTId(commonSupport.getUUID())
                     .withIssuedAt(new Date())
                     .withExpiresAt(expireDate.plusMinutes(expiration).toDate())
                     .withClaim("did", player.getDeviceId()) // device id

@@ -1,7 +1,6 @@
 package client;
 
 import com.gompang.packet.HeartBeat;
-import com.gompang.packet.PacketType;
 import com.google.flatbuffers.FlatBufferBuilder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

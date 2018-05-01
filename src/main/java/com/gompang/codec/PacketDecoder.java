@@ -1,7 +1,6 @@
 package com.gompang.codec;
 
 import com.gompang.packet.Packet;
-import com.gompang.packet.PacketType;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
