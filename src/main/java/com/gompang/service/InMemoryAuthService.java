@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.gompang.common.support.CommonSupport;
 import com.gompang.domain.Player;
+import com.gompang.domain.PlayerToken;
 import com.gompang.packet.AuthResult;
 import com.gompang.repository.PlayerStore;
 import org.joda.time.DateTime;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class InMemoryAuthService implements AuthService {
@@ -67,6 +69,11 @@ public class InMemoryAuthService implements AuthService {
 
         // create token
         return new PlayerToken(player, generateToken(player));
+    }
+
+    @Override
+    public boolean isLogin(Player player) {
+        return false;
     }
 
     private String generateToken(Player player) {
